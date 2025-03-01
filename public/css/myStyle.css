@@ -1,0 +1,66 @@
+.bi-cloud-lightning-fill::before{
+margin-right: 1rem;
+font-size: 2rem;
+}
+
+/* ############sidebar######### */
+
+.sidebar{
+transition: 0.5s;
+width: 280px
+}
+.small-sidebar{
+  width: 77px;
+}
+
+.small-sidebar .sidebar-text{
+display: none;
+
+}
+
+
+/* ###########logo######### */
+.bi-cloud-lightning-fill{
+  transition: 1s;
+  transform: rotateY(360deg);
+  margin-top: 0.5rem;
+}
+
+.small-sidebar .bi-cloud-lightning-fill{
+  margin-top: 3rem;
+}
+
+.small-sidebar .bi-x-circle::before{
+  content: "\F114";
+  
+}
+
+.small-sidebar .bi-cloud-lightning-fill::before{
+  content: "\F2AC";
+  transition: 1.2s;
+  transform: rotateY(360deg);
+  margin-left: 0.55rem;
+}
+
+.bi-x-circle{
+  font-size: 1.4rem;
+  transition: 0.25s;
+  color: #dee2e6;
+
+}
+
+.bi-x-circle:hover{
+  font-size: 1.5rem;
+  color: white;
+  
+
+}
+
+
+
+.nav-link {
+    padding: 0.5rem 0.45rem;
+    .pe-none{
+      margin-left: 7px;
+    }
+}
