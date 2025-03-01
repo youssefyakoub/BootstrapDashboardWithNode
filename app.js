@@ -28,7 +28,7 @@ app.use(connectLivereload());
 liveReloadServer.server.once("connection", () => {
   setTimeout(() => {
     liveReloadServer.refresh("/");
-  }, 100000);
+  }, 100);
 });
 
 async function connectDB() {
