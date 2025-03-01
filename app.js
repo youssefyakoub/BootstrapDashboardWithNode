@@ -25,39 +25,19 @@ liveReloadServer.watch(path.join(__dirname, "public"));
 const connectLivereload = require("connect-livereload");
 app.use(connectLivereload());
 
-if (process.env.NODE_ENV !== "production") {
-  const livereload = require("livereload");
-  const liveReloadServer = livereload.createServer();
-  liveReloadServer.watch(path.join(__dirname, "public"));
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
 
-  const connectLivereload = require("connect-livereload");
-  app.use(connectLivereload());
-
-  liveReloadServer.server.once("connection", () => {
-    setTimeout(() => {
-      liveReloadServer.refresh("/");
-    }, 100);
-  });
-}
-
-
-async function connectDB() {
-  try {
-    await mongoose.connect(process.env.DB_CONNECTION, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000, // محاولة الاتصال خلال 5 ثوانٍ
-      socketTimeoutMS: 45000 // يحافظ على الاتصال لمدة 45 ثانية إذا لم يكن هناك استجابة
-    });
-    console.log("✅ MongoDB Connected Successfully!");
-  } catch (err) {
-    console.error("❌ MongoDB Connection Error:", err);
-    process.exit(1);
-  }
-}
-connectDB();
-
-
+mongoose
+  .connect(process.env.DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+  })
+  .catch((err) => console.log(err));
 
 app.use("/", allRoutes);
 app.use("/user/add.html", addUser);
