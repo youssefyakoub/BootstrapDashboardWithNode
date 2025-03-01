@@ -18,27 +18,27 @@ const allRoutes = require("./routes/allRoutes");
 const addUser = require("./routes/addUser");
 const editUser = require("./routes/editUser");
 
-const livereload = require("livereload");
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch(path.join(__dirname, "public"));
+// const livereload = require("livereload");
+// const liveReloadServer = livereload.createServer();
+// liveReloadServer.watch(path.join(__dirname, "public"));
 
-const connectLivereload = require("connect-livereload");
-app.use(connectLivereload());
+// const connectLivereload = require("connect-livereload");
+// app.use(connectLivereload());
 
-if (process.env.NODE_ENV !== "production") {
-  const livereload = require("livereload");
-  const liveReloadServer = livereload.createServer();
-  liveReloadServer.watch(path.join(__dirname, "public"));
+// if (process.env.NODE_ENV !== "production") {
+//   const livereload = require("livereload");
+//   const liveReloadServer = livereload.createServer();
+//   liveReloadServer.watch(path.join(__dirname, "public"));
 
-  const connectLivereload = require("connect-livereload");
-  app.use(connectLivereload());
+//   const connectLivereload = require("connect-livereload");
+//   app.use(connectLivereload());
 
-  liveReloadServer.server.once("connection", () => {
-    setTimeout(() => {
-      liveReloadServer.refresh("/");
-    }, 100);
-  });
-}
+//   liveReloadServer.server.once("connection", () => {
+//     setTimeout(() => {
+//       liveReloadServer.refresh("/");
+//     }, 100);
+//   });
+// }
 
 async function connectDB() {
   try {
