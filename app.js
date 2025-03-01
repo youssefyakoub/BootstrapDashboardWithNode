@@ -25,11 +25,20 @@ liveReloadServer.watch(path.join(__dirname, "public"));
 const connectLivereload = require("connect-livereload");
 app.use(connectLivereload());
 
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
+if (process.env.NODE_ENV !== "production") {
+  const livereload = require("livereload");
+  const liveReloadServer = livereload.createServer();
+  liveReloadServer.watch(path.join(__dirname, "public"));
+
+  const connectLivereload = require("connect-livereload");
+  app.use(connectLivereload());
+
+  liveReloadServer.server.once("connection", () => {
+    setTimeout(() => {
+      liveReloadServer.refresh("/");
+    }, 100);
+  });
+}
 
 async function connectDB() {
   try {
