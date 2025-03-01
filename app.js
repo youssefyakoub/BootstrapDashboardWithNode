@@ -46,9 +46,8 @@ async function connectDB() {
     await mongoose.connect(process.env.DB_CONNECTION, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      keepAlive: true
+      serverSelectionTimeoutMS: 5000, // محاولة الاتصال خلال 5 ثوانٍ
+      socketTimeoutMS: 45000 // يحافظ على الاتصال لمدة 45 ثانية إذا لم يكن هناك استجابة
     });
     console.log("✅ MongoDB Connected Successfully!");
   } catch (err) {
@@ -57,6 +56,7 @@ async function connectDB() {
   }
 }
 connectDB();
+
 
 
 app.use("/", allRoutes);
