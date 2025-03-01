@@ -1,6 +1,6 @@
 const express = require("express");
 require("dotenv").config();
-const path = require("path"); // ✅ استدعاء واحد فقط
+const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
@@ -14,12 +14,10 @@ app.use(express.static("public"));
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
-// استيراد المسارات
 const allRoutes = require("./routes/allRoutes");
 const addUser = require("./routes/addUser");
 const editUser = require("./routes/editUser");
 
-// 🔹 إعداد livereload
 const livereload = require("livereload");
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "public"));
@@ -33,17 +31,16 @@ liveReloadServer.server.once("connection", () => {
   }, 100);
 });
 
-// الاتصال بقاعدة البيانات
-mongoose.connect(process.env.DB_CONNECTION, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000,
-}).catch(err => console.log(err));
+mongoose
+  .connect(process.env.DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+  })
+  .catch((err) => console.log(err));
 
-module.exports = app; // ✅ تصدير التطبيق لـ Vercel
-
-
-// استخدام المسارات
 app.use("/", allRoutes);
 app.use("/user/add.html", addUser);
 app.use("/edit", editUser);
+
+module.exports = app;
