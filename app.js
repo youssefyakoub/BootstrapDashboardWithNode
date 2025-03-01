@@ -34,16 +34,13 @@ liveReloadServer.server.once("connection", () => {
 });
 
 // الاتصال بقاعدة البيانات
-mongoose
-  .connect(process.env.DB_CONNECTION)
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${port}/`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+mongoose.connect(process.env.DB_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+}).catch(err => console.log(err));
+
+module.exports = app; // ✅ تصدير التطبيق لـ Vercel
 
 
 // استخدام المسارات
