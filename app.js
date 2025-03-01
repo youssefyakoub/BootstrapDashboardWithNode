@@ -1,26 +1,25 @@
 const express = require("express");
-require('dotenv').config();
-const path = require("path");
+require("dotenv").config();
+const path = require("path"); // ✅ استدعاء واحد فقط
 const app = express();
-const port = process.env.PORT ||3000;
+const port = process.env.PORT || 3000;
 const mongoose = require("mongoose");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
-const allRoutes = require("./routes/allRoutes")
-const addUser = require("./routes/addUser")
-const editUser = require("./routes/editUser")
+// استيراد المسارات
+const allRoutes = require("./routes/allRoutes");
+const addUser = require("./routes/addUser");
+const editUser = require("./routes/editUser");
 
-// auto refresh
-
-const path = require("path");
+// 🔹 إعداد livereload
 const livereload = require("livereload");
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "public"));
@@ -34,25 +33,19 @@ liveReloadServer.server.once("connection", () => {
   }, 100);
 });
 
-
+// الاتصال بقاعدة البيانات
 mongoose
-  .connect(
-    process.env.DB_CONNECTION
-  )
+  .connect(process.env.DB_CONNECTION)
   .then(() => {
     app.listen(port, () => {
-      console.log(`http://localhost:${port}/`);
+      console.log(`🚀 Server running on http://localhost:${port}/`);
     });
   })
   .catch((err) => {
     console.log(err);
   });
 
-
-
-
-
-app.use(allRoutes)
-app.use("/user/add.html",addUser)
-app.use("/edit",editUser)
-
+// استخدام المسارات
+app.use("/", allRoutes);
+app.use("/user/add.html", addUser);
+app.use("/edit", editUser);
