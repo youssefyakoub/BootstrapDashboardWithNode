@@ -1,51 +1,57 @@
 const express = require("express");
-require("dotenv").config();
-const mongoose = require("mongoose");
-const methodOverride = require("method-override");
-const path = require("path");
-
+require('dotenv').config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT ||3000;
+const mongoose = require("mongoose");
 
-// Set EJS as the view engine
 app.set("view engine", "ejs");
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "Views")));
+
+app.use(express.static("public"));
+
+var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
-// Import routes
-const allRoutes = require("./routes/allRoutes");
-const addUser = require("./routes/addUser");
-const editUser = require("./routes/editUser");
+const allRoutes = require("./routes/allRoutes")
+const addUser = require("./routes/addUser")
+const editUser = require("./routes/editUser")
 
-// Use routes
-app.use(allRoutes);
-app.use("/user/add.html", addUser);
-app.use("/edit", editUser);
+// auto refresh
 
-// Handle 404 errors
-app.use((req, res) => {
-  res.status(404).render("404", { title: "Page Not Found" });
+const path = require("path");
+const livereload = require("livereload");
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, "public"));
+
+const connectLivereload = require("connect-livereload");
+app.use(connectLivereload());
+
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
 });
 
-// Connect to MongoDB
+
 mongoose
-  .connect(process.env.DB_CONNECTION)
+  .connect(
+    process.env.DB_CONNECTION
+  )
   .then(() => {
-    console.log("✅ MongoDB Connected");
-    // Start server only after DB is connected
-    if (require.main === module) {
-      app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
-      });
-    }
+    app.listen(port, () => {
+      console.log(`http://localhost:${port}/`);
+    });
   })
   .catch((err) => {
-    console.error("❌ MongoDB Connection Error:", err);
-    process.exit(1);
+    console.log(err);
   });
 
-// Export the app for Vercel
-module.exports = app;
+
+
+
+
+app.use(allRoutes)
+app.use("/user/add.html",addUser)
+app.use("/edit",editUser)
+
