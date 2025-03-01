@@ -31,13 +31,20 @@ liveReloadServer.server.once("connection", () => {
   }, 100000);
 });
 
-mongoose
-  .connect(process.env.DB_CONNECTION, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-  })
-  .catch((err) => console.log(err));
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION, {
+      serverSelectionTimeoutMS: 5000, // محاولة الاتصال لمدة 5 ثوانٍ
+      socketTimeoutMS: 45000 // يحافظ على الاتصال لمدة 45 ثانية إذا لم يكن هناك استجابة
+    });
+    console.log("✅ MongoDB Connected Successfully!");
+  } catch (err) {
+    console.error("❌ MongoDB Connection Error:", err);
+    process.exit(1);
+  }
+}
+connectDB();
+
 
 app.use("/", allRoutes);
 app.use("/user/add.html", addUser);
