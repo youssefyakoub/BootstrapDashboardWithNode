@@ -45,6 +45,7 @@ mongoose
     console.log(err);
   });
 
+
 // استخدام المسارات
 app.use("/", allRoutes);
 app.use("/user/add.html", addUser);
