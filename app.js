@@ -25,19 +25,39 @@ liveReloadServer.watch(path.join(__dirname, "public"));
 const connectLivereload = require("connect-livereload");
 app.use(connectLivereload());
 
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
+if (process.env.NODE_ENV !== "production") {
+  const livereload = require("livereload");
+  const liveReloadServer = livereload.createServer();
+  liveReloadServer.watch(path.join(__dirname, "public"));
 
-mongoose
-  .connect(process.env.DB_CONNECTION, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-  })
-  .catch((err) => console.log(err));
+  const connectLivereload = require("connect-livereload");
+  app.use(connectLivereload());
+
+  liveReloadServer.server.once("connection", () => {
+    setTimeout(() => {
+      liveReloadServer.refresh("/");
+    }, 100);
+  });
+}
+
+
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      keepAlive: true
+    });
+    console.log("✅ MongoDB Connected Successfully!");
+  } catch (err) {
+    console.error("❌ MongoDB Connection Error:", err);
+    process.exit(1);
+  }
+}
+connectDB();
+
 
 app.use("/", allRoutes);
 app.use("/user/add.html", addUser);
