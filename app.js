@@ -18,6 +18,8 @@ const allRoutes = require("./routes/allRoutes");
 const addUser = require("./routes/addUser");
 const editUser = require("./routes/editUser");
 
+
+
 const livereload = require("livereload");
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(path.join(__dirname, "public"));
